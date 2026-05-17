@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Channly — Premium YouTube Channels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f4f0;
+    --cream: #f0ede6;
+    --accent: #4f46e5;
+    --accent-light: #6d63ff;
+    --mid: #6b6b6b;
+    --border: rgba(0,0,0,0.1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--cream);
+    color: var(--black);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    background: rgba(240, 237, 230, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 18px; font-weight: 700; letter-spacing: -0.02em;
+    text-decoration: none; color: var(--black);
+  }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--black);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .logo-icon svg { width: 18px; height: 18px; fill: var(--white); }
+
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px; font-weight: 600; letter-spacing: 0.02em;
+    text-decoration: none; color: var(--mid);
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover, .nav-links a.active { color: var(--black); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; right: -100px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(79,70,229,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px; margin: 0 auto; width: 100%;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--mid);
+    background: rgba(255,255,255,0.5);
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent); animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+
+  .hero-headline {
+    font-size: clamp(48px, 6vw, 80px);
+    font-weight: 800;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero-headline em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--mid);
+  }
+
+  .hero-sub {
+    font-size: 17px; line-height: 1.7;
+    color: var(--mid); font-weight: 400;
+    max-width: 480px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .hero-sub strong { color: var(--black); font-weight: 700; }
+
+  .hero-actions {
+    display: flex; align-items: center; gap: 16px;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 28px;
+    background: var(--black);
+    color: var(--white);
+    border: none; border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.02em;
+    cursor: pointer; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(79,70,229,0.25);
+  }
+
+  .btn-discord { background: #5865F2; }
+  .btn-discord:hover { box-shadow: 0 12px 32px rgba(88,101,242,0.35); }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px;
+    background: transparent;
+    color: var(--black);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--black);
+    background: rgba(0,0,0,0.03);
+  }
+
+  .hero-trust {
+    display: flex; gap: 32px; margin-top: 52px;
+    animation: fadeUp 0.6s 0.4s ease both;
+  }
+
+  .trust-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; font-weight: 600; color: var(--mid);
+  }
+
+  .trust-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* PHONE MOCKUP */
+  .hero-visual {
+    display: flex; justify-content: center; align-items: center;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .phone-wrap {
+    position: relative;
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.18));
+  }
+
+  .phone-frame {
+    width: 280px;
+    background: #111;
+    border-radius: 44px;
+    padding: 14px;
+    position: relative;
+    border: 2px solid #2a2a2a;
+  }
+
+  .phone-screen {
+    background: #1a1a1a;
+    border-radius: 32px;
+    overflow: hidden;
+    min-height: 540px;
+  }
+
+  .phone-status {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px 8px;
+    font-size: 12px; font-weight: 700; color: #fff;
+  }
+
+  .phone-status-icons { display: flex; gap: 6px; align-items: center; }
+  .status-dot { width: 4px; height: 4px; background: #fff; border-radius: 50%; }
+
+  .yt-studio-header {
+    padding: 8px 16px 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .yt-logo {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 14px; font-weight: 700; color: #fff;
+  }
+
+  .yt-logo-icon {
+    background: #FF0000; border-radius: 4px;
+    padding: 2px 5px; font-size: 11px; font-weight: 900; color: #fff;
+  }
+
+  .yt-header-icons { display: flex; gap: 12px; }
+  .yt-header-icons span { font-size: 16px; color: #888; cursor: pointer; }
+
+  .yt-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .yt-tab {
+    flex: 1; padding: 10px 4px;
+    font-size: 10px; font-weight: 600; color: #666;
+    text-align: center; cursor: pointer;
+    border-bottom: 2px solid transparent;
+  }
+
+  .yt-tab.active { color: #fff; border-bottom-color: #fff; }
+
+  .channel-list { padding: 12px 16px; border-bottom: 1px solid #222; }
+
+  .channel-item {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .channel-thumb {
+    width: 36px; height: 36px; border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .channel-info { flex: 1; }
+  .channel-bar { height: 6px; border-radius: 3px; background: #2e2e2e; margin-bottom: 4px; }
+  .channel-bar.short { width: 60%; }
+  .channel-stat {
+    font-size: 12px; font-weight: 700; color: #ccc;
+    text-align: right; white-space: nowrap;
+  }
+
+  .realtime-section { padding: 14px 16px; border-bottom: 1px solid #222; }
+  .realtime-label { font-size: 11px; color: #666; font-weight: 600; margin-bottom: 6px; }
+  .realtime-number {
+    font-size: 26px; font-weight: 800; color: #fff;
+    letter-spacing: -0.02em; margin-bottom: 2px;
+  }
+
+  .realtime-sub { font-size: 10px; color: #555; }
+
+  .sparkline {
+    width: 100%; height: 40px; margin-top: 8px;
+  }
+
+  .video-list { padding: 10px 16px; }
+
+  .video-item {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .video-thumb {
+    width: 48px; height: 28px; border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .video-info { flex: 1; }
+  .video-bar { height: 5px; border-radius: 3px; background: #2a2a2a; margin-bottom: 4px; }
+  .video-bar.short { width: 50%; }
+  .video-stat { font-size: 11px; font-weight: 700; color: #aaa; text-align: right; }
+
+  .phone-nav {
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 12px 8px 16px;
+    border-top: 1px solid #2a2a2a;
+  }
+
+  .pnav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 9px; color: #555; font-weight: 600; cursor: pointer;
+  }
+
+  .pnav-item.active { color: #fff; }
+  .pnav-item svg { width: 18px; height: 18px; }
+
+  /* Floating badge */
+  .phone-badge {
+    position: absolute;
+    right: -50px; top: 40px;
+    background: #fff;
+    border-radius: 14px;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+
+  /* SECTION: HOW IT WORKS */
+  .section {
+    padding: 100px 48px;
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .section-heading {
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 800; letter-spacing: -0.03em;
+    line-height: 1.05; margin-bottom: 60px;
+  }
+
+  .section-heading em {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic; font-weight: 400; color: var(--mid);
+  }
+
+  /* STEPS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .step {
+    background: var(--cream);
+    padding: 40px 36px;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .step:hover { background: #fff; }
+
+  .step-number {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--mid); text-transform: uppercase; margin-bottom: 20px;
+  }
+
+  .step-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .step-icon svg { width: 24px; height: 24px; stroke: #fff; fill: none; stroke-width: 2; }
+
+  .step h3 {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+
+  .step p { font-size: 15px; line-height: 1.65; color: var(--mid); font-weight: 400; }
+
+  /* STATS */
+  .stats-bar {
+    background: var(--black);
+    color: var(--white);
+    padding: 60px 48px;
+  }
+
+  .stats-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+
+  .stat-item { text-align: center; }
+
+  .stat-number {
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 800; letter-spacing: -0.03em;
+    margin-bottom: 8px;
+    font-family: 'Instrument Serif', serif; font-style: italic;
+  }
+
+  .stat-label {
+    font-size: 13px; font-weight: 600; color: #666;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+
+  /* SERVICES */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .service-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .service-card:hover { transform: translateY(-4px); box-shadow: 0 20px 48px rgba(0,0,0,0.08); }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--mid);
+    margin-bottom: 20px;
+  }
+
+  .service-card h3 { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 12px; }
+  .service-card p { font-size: 15px; line-height: 1.65; color: var(--mid); font-weight: 400; }
+
+  .service-arrow {
+    position: absolute; bottom: 32px; right: 32px;
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .service-card:hover .service-arrow { background: var(--black); }
+  .service-card:hover .service-arrow svg { stroke: #fff; }
+  .service-arrow svg { width: 16px; height: 16px; stroke: var(--black); fill: none; stroke-width: 2.5; transition: stroke 0.2s; }
+
+  /* TESTIMONIALS */
+  .testimonials {
+    padding: 100px 48px;
+    background: var(--black);
+  }
+
+  .testimonials-inner { max-width: 1200px; margin: 0 auto; }
+
+  .testimonials .section-label { color: #4f46e5; }
+
+  .testimonials .section-heading { color: var(--white); }
+  .testimonials .section-heading em { color: #555; }
+
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .testimonial-card {
+    background: #161616;
+    border: 1px solid #222;
+    border-radius: 16px;
+    padding: 28px;
+  }
+
+  .stars { color: #FFB800; font-size: 14px; margin-bottom: 16px; }
+
+  .testimonial-card p {
+    font-size: 15px; line-height: 1.65; color: #999;
+    font-weight: 400; margin-bottom: 20px;
+    font-family: 'Instrument Serif', serif; font-style: italic;
+    font-size: 17px;
+  }
+
+  .testimonial-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .author-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: #fff;
+    flex-shrink: 0;
+  }
+
+  .author-name { font-size: 13px; font-weight: 700; color: #fff; }
+  .author-role { font-size: 12px; color: #555; }
+
+  /* CTA */
+  .cta-section {
+    padding: 120px 48px;
+    text-align: center;
+    max-width: 800px; margin: 0 auto;
+  }
+
+  .cta-section .section-label { text-align: center; }
+  .cta-section .section-heading { margin-bottom: 20px; }
+
+  .cta-sub {
+    font-size: 17px; color: var(--mid); margin-bottom: 40px;
+    line-height: 1.65; font-weight: 400;
+  }
+
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; align-items: center; }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    color: #555;
+    padding: 40px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .footer-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 16px; font-weight: 700; color: #fff;
+    text-decoration: none;
+  }
+
+  .footer-logo-icon {
+    width: 28px; height: 28px; background: #fff; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .footer-logo-icon svg { width: 16px; height: 16px; fill: var(--black); }
+  .footer-copy { font-size: 13px; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 13px; color: #555; text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: #fff; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .hero { padding: 100px 24px 60px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 60px; }
+    .hero-visual { order: -1; }
+    .phone-badge { display: none; }
+    .section { padding: 60px 24px; }
+    .steps { grid-template-columns: 1fr; }
+    .stats-bar { padding: 48px 24px; }
+    .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .testimonials { padding: 60px 24px; }
+    .testimonials-grid { grid-template-columns: 1fr; }
+    .cta-section { padding: 80px 24px; }
+    .cta-buttons { flex-direction: column; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+    .hero-trust { flex-wrap: wrap; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M8 5l10 7-10 7V5z"/></svg>
+    </div>
+    Channly
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#services" class="active">Services</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#">FAQ</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        Trusted by 200+ Creators
+      </div>
+      <h1 class="hero-headline">
+        Premium<br>
+        YouTube <em>Channels.</em><br>
+        Transparent<br>
+        <em>Deals.</em><br>
+        Proven Results.
+      </h1>
+      <p class="hero-sub">
+        We help creators <strong>buy & sell</strong> pre-monetized YouTube channels and provide expert support for reused content monetization appeals. Safe. Transparent. Reliable.
+      </p>
+      <div class="hero-actions">
+        <a href="#" class="btn-primary btn-discord">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.201 13.201 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+          Join Discord
+        </a>
+        <a href="#services" class="btn-secondary">Explore Services →</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          100% Transparent
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Safe & Secure
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Trusted by Creators
+        </div>
+      </div>
+    </div>
+
+    <!-- PHONE MOCKUP -->
+    <div class="hero-visual">
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <!-- Status Bar -->
+            <div class="phone-status">
+              <span>9:24</span>
+              <div class="phone-status-icons">
+                <div class="status-dot"></div>
+                <div class="status-dot"></div>
+                <div class="status-dot"></div>
+              </div>
+            </div>
+            <!-- YT Studio Header -->
+            <div class="yt-studio-header">
+              <div class="yt-logo">
+                <span class="yt-logo-icon">▶</span>
+                Studio
+              </div>
+              <div class="yt-header-icons">
+                <span>＋</span>
+                <span>🔔</span>
+              </div>
+            </div>
+            <!-- Tabs -->
+            <div class="yt-tabs">
+              <div class="yt-tab active">Overview</div>
+              <div class="yt-tab">Content</div>
+              <div class="yt-tab">Audience</div>
+              <div class="yt-tab">Revenue</div>
+            </div>
+            <!-- Channel List -->
+            <div class="channel-list">
+              <div class="channel-item">
+                <div class="channel-thumb" style="background: linear-gradient(135deg,#7c3aed,#4f46e5)"></div>
+                <div class="channel-info">
+                  <div class="channel-bar"></div>
+                  <div class="channel-bar short"></div>
+                </div>
+                <div class="channel-stat">181.9k</div>
+              </div>
+              <div class="channel-item">
+                <div class="channel-thumb" style="background: linear-gradient(135deg,#0ea5e9,#2563eb)"></div>
+                <div class="channel-info">
+                  <div class="channel-bar"></div>
+                  <div class="channel-bar short"></div>
+                </div>
+                <div class="channel-stat">129.4k</div>
+              </div>
+            </div>
+            <!-- Real Time -->
+            <div class="realtime-section">
+              <div class="realtime-label">Real time</div>
+              <div class="realtime-number">5,736,794</div>
+              <div class="realtime-sub">Views · 48 hours</div>
+              <svg class="sparkline" viewBox="0 0 240 40" preserveAspectRatio="none">
+                <polyline points="0,35 20,30 40,28 60,32 80,20 100,22 120,18 140,15 160,10 180,8 200,5 220,4 240,2"
+                  fill="none" stroke="#22d3ee" stroke-width="2" stroke-linecap="round"/>
+                <polyline points="0,35 20,30 40,28 60,32 80,20 100,22 120,18 140,15 160,10 180,8 200,5 220,4 240,2 240,40 0,40"
+                  fill="url(#spark-grad)" opacity="0.3"/>
+                <defs>
+                  <linearGradient id="spark-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#22d3ee"/>
+                    <stop offset="100%" stop-color="transparent"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <!-- Video List -->
+            <div class="video-list">
+              <div class="video-item">
+                <div class="video-thumb" style="background: linear-gradient(135deg,#f59e0b,#ef4444)"></div>
+                <div class="video-info">
+                  <div class="video-bar"></div>
+                  <div class="video-bar short"></div>
+                </div>
+                <div class="video-stat">3.0m</div>
+              </div>
+              <div class="video-item">
+                <div class="video-thumb" style="background: linear-gradient(135deg,#10b981,#059669)"></div>
+                <div class="video-info">
+                  <div class="video-bar"></div>
+                  <div class="video-bar short"></div>
+                </div>
+                <div class="video-stat">861.1k</div>
+              </div>
+              <div class="video-item">
+                <div class="video-thumb" style="background: linear-gradient(135deg,#8b5cf6,#6d28d9)"></div>
+                <div class="video-info">
+                  <div class="video-bar"></div>
+                  <div class="video-bar short"></div>
+                </div>
+                <div class="video-stat">590.4k</div>
+              </div>
+            </div>
+            <!-- Bottom Nav -->
+            <div class="phone-nav">
+              <div class="pnav-item active">
+                <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                Dashboard
+              </div>
+              <div class="pnav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                Content
+              </div>
+              <div class="pnav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Analytics
+              </div>
+              <div class="pnav-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                Community
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating Badge -->
+        <div class="phone-badge">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#FF0000"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.77 1.52V6.76a4.85 4.85 0 01-1-.07z"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item">
+      <div class="stat-number">200+</div>
+      <div class="stat-label">Creators Served</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">$2.4M</div>
+      <div class="stat-label">Channels Transacted</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">98%</div>
+      <div class="stat-label">Satisfaction Rate</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">48h</div>
+      <div class="stat-label">Avg. Deal Time</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section" id="services">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-heading">Three steps to your <em>next channel</em></h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-number">Step 01</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </div>
+      <h3>Browse Listings</h3>
+      <p>Explore our curated marketplace of pre-monetized YouTube channels with verified analytics and transparent pricing.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">Step 02</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <h3>Connect & Negotiate</h3>
+      <p>Chat directly with verified sellers through our Discord. Our team facilitates every deal to ensure fair terms for both parties.</p>
+    </div>
+    <div class="step">
+      <div class="step-number">Step 03</div>
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3>Secure Transfer</h3>
+      <p>We handle the entire channel transfer process with escrow protection, ensuring funds and ownership change hands safely.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="section">
+  <div class="section-label">Our Services</div>
+  <h2 class="section-heading">Everything you need to <em>grow</em></h2>
+  <div class="services-grid" id="results">
+    <div class="service-card">
+      <div class="service-tag">Buy</div>
+      <h3>Channel Acquisition</h3>
+      <p>Purchase established, pre-monetized YouTube channels with real subscriber bases, verified analytics, and full ownership transfer.</p>
+      <div class="service-arrow">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-tag">Sell</div>
+      <h3>Channel Listing</h3>
+      <p>List your YouTube channel on our premium marketplace. We connect you with vetted buyers and handle negotiations professionally.</p>
+      <div class="service-arrow">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-tag">Appeals</div>
+      <h3>Monetization Appeals</h3>
+      <p>Expert support for reused content monetization appeals. Our team has helped hundreds of creators restore or gain monetization.</p>
+      <div class="service-arrow">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+    <div class="service-card">
+      <div class="service-tag">Consulting</div>
+      <h3>Growth Strategy</h3>
+      <p>One-on-one consultations with YouTube growth experts to maximize your channel's revenue potential and audience development.</p>
+      <div class="service-arrow">
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="about">
+  <div class="testimonials-inner">
+    <div class="section-label">Testimonials</div>
+    <h2 class="section-heading">What creators <em>say about us</em></h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Found my perfect channel within 48 hours. The entire process was smooth, transparent, and I felt protected at every step."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">MK</div>
+          <div>
+            <div class="author-name">Marcus K.</div>
+            <div class="author-role">Content Creator · 250K subs</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"Sold my channel for 40% more than I expected. The team negotiated on my behalf and handled everything professionally."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">SL</div>
+          <div>
+            <div class="author-name">Sarah L.</div>
+            <div class="author-role">Former Channel Owner</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p>"The monetization appeal service was a game-changer. Restored in under a week after months of trying on my own."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">JR</div>
+          <div>
+            <div class="author-name">James R.</div>
+            <div class="author-role">YouTube Creator · 89K subs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="text-align:center; display:block;">Get Started</div>
+  <h2 class="section-heading">Ready to make your <em>move?</em></h2>
+  <p class="cta-sub">Join 200+ creators who trust Channly for their most important YouTube business decisions.</p>
+  <div class="cta-buttons">
+    <a href="#" class="btn-primary btn-discord">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994.021-.04.001-.088-.041-.104a13.201 13.201 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+      Join Our Discord
+    </a>
+    <a href="#services" class="btn-secondary">Browse Channels →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">
+    <div class="footer-logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M8 5l10 7-10 7V5z"/></svg>
+    </div>
+    Channly
+  </a>
+  <span class="footer-copy">© 2026 Channly. All rights reserved.</span>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
